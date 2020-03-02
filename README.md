@@ -10,6 +10,10 @@ Sorteador simples, em console, porem eficiente usando a API do Sympla.
 
 Instalação e Execução
 -------------
+Baixe o codigo:
+``` git clone https://github.com/Rehzende/SymplaSorteador.git```
+
+```cd SymplaSorteador```
 
 Instale os modulos:
 ```npm i readline-sync```
