@@ -13,14 +13,24 @@ Instalação e Execução
 
 Instale os modulos:
 ```npm i readline-sync```
+
 ```npm i raffle-x```
+
 ```npm install```
+
 Execute:
+
 ```node Sympla.js```
+
+
 **Informe o token:** Gerar um token no painel do Sympla
+
 ```https://organizador.sympla.com.br/minha-conta#tab-integracoes```
+
 **Escolha um Evento:**
+
 **Informe o numero de sorteados: **
+
 
 
 > **Note:**
