@@ -1,5 +1,8 @@
-Sorteador de participantes Sympla!
+*Sorteador de participantes Sympla!*
+
 **===================**
+
+
 Sorteador simples, em console, porem eficiente usando a API do Sympla.
 
 ----------
