@@ -1,38 +1,29 @@
 const http = require('https');
-const readlineSync = require('readline-sync');
-const rafflex = require('raffle-x');
+const express = require('express'),
+        app = express();
 
-(async () => {
-    var token = readlineSync.question('Informe o token: ');
-
-    const events = await getEventsByToken(token).catch(err => console.log('Não foi possível carregar os eventos a partir do token.'));
-
-    events.forEach((element, index) => {
-        console.log('[' + (index + 1) + '] ' + element.name);
-    });
-
-    var selectedEvent = parseInt(readlineSync.question('Escolha um evento: '));
-    var QtdSorteados = parseInt(readlineSync.question('Digite a quantidade de sorteados: '));
-
-
-    if (selectedEvent <= 0 || selectedEvent > events.length) console.log('Evento inválido.');
-    else {
-        const selectedEventParticipants = await getEventParticipantsByEventId(token, events[selectedEvent - 1].id).catch(err => console.log('Não foi possível carregar os participantes a partir do id do evento.'));
-        const selectedEventHasCheckinParticipants = selectedEventParticipants.filter(obj => obj.checkin[0].check_in);
-
-        const Sorteados = rafflex.raffle(selectedEventHasCheckinParticipants, 'id', QtdSorteados, false)
-
-        Sorteados.forEach(element => {
-          console.log(JSON.stringify ("NOME: " + element.first_name +" " + element.last_name));
-           
-        });
-        
+app.get('/events', async function(req, res){
+    try {
+        const token = req.headers.token;
+        const events = await getEventsByToken(token);
+        res.json(events);
+    } catch (error) {
+        res.status(500).json({ error: error });
     }
+});
 
-    
+app.get('/events/:eventId/participants', async function(req, res){
+    try {
+        const token = req.headers.token;
+        const participants = await getEventParticipantsByEventId(token, req.params.eventId);
+        res.json(participants);
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
+});
 
-
-})();
+var server = app.listen(3000);
+console.log('Servidor Express iniciado na porta %s', server.address().port);
 
 function getEventsPromise(token) {
     const options = {
@@ -83,7 +74,7 @@ async function getEventsByToken(token) {
         const eventsResponse = await getEventsPromise(token);
         return Array.from(eventsResponse.data);
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -92,6 +83,6 @@ async function getEventParticipantsByEventId(token, eventId) {
         const eventParticipantsResponse = await getEventParticipantsPromise(token, eventId);
         return Array.from(eventParticipantsResponse.data);
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
